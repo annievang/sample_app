@@ -1,23 +1,22 @@
-class PagesController < ApplicationController
-
-  def home
-    @base_title = "Ruby on Rails Tutorial Sample App"
-    @title = @base_title + " | Home"
+class PagesController < ApplicationController  
+    def home
+    
+    @title = "Home"
   end
 
   def contact
-    @base_title = "Ruby on Rails Tutorial Sample App"
-    @title = @base_title + " | Contact"
+    
+    @title = "Contact"
   end
 
   def about
-    @base_title = "Ruby on Rails Tutorial Sample App"
-    @title = @base_title + " | About"
+   
+    @title = "About"
   end
   
   def help
-    @base_title = "Ruby on Rails Tutorial Sample App"
-    @title = @base_title + " | Help"
+    
+    @title = "Help"
   end
   
   
