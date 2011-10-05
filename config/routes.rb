@@ -1,4 +1,8 @@
 SampleApp::Application.routes.draw do
+  get "abc/showit"
+
+  get "demo_arrays/showit"
+
   get "users/new"
 
   match '/signup',  :to => 'users#new'
