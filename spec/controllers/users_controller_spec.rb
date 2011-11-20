@@ -33,11 +33,10 @@ describe "GET 'show'" do
       get :show, :id => @user
       response.should have_selector("h1>img", :class => "gravatar")
     end  
-    
-    
-  end
+      
+end
 
-  describe "GET 'new'" do
+describe "GET 'new'" do
 
     it "should be successful" do
       get 'new'
@@ -48,7 +47,27 @@ describe "GET 'show'" do
       get 'new'
       response.should have_selector("title", :content => "Sign up")
     end
-  end
+    
+    it "should have a name field" do
+      get :new
+      response.should have_selector("input[name='user[name]'][type='text']")
+    end
+
+    it "should have an email field" do
+    get :new
+      response.should have_selector("input[name='user[email]'][type='text']")
+    end
+
+    it "should have a password field" do
+    get :new
+      response.should have_selector("input[name='user[password]'][type='password']")  
+    end
+
+    it "should have a password confirmation field" do
+    get :new
+      response.should have_selector("input[name='user[password_confirmation]'][type='password']")
+    end
+end
   
   describe "POST 'create'" do
 
@@ -74,6 +93,12 @@ describe "GET 'show'" do
         post :create, :user => @attr
         response.should render_template('new')
       end
+      
+      it "should sign the user in" do
+        post :create, :user => @attr
+        controller.should be_signed_in
+      end
+      
     end
     
     describe "success" do
@@ -99,7 +124,38 @@ describe "GET 'show'" do
         flash[:success].should =~ /welcome to the sample app/i
       end
       
+      it "should sign the user in" do
+        post :create, :user => @attr
+        controller.should be_signed_in
+      end
+      
     end
     
+  
+  describe "sign in/out" do
+
+    describe "failure" do
+      it "should not sign a user in" do
+        visit signin_path
+        fill_in :email,    :with => ""
+        fill_in :password, :with => ""
+        click_button
+        response.should have_selector("div.flash.error", :content => "Invalid")
+      end
+    end
+
+    describe "success" do
+      it "should sign a user in and out" do
+        user = Factory(:user)
+        visit signin_path
+        fill_in :email,    :with => user.email
+        fill_in :password, :with => user.password
+        click_button
+        controller.should be_signed_in
+        click_link "Sign out"
+        controller.should_not be_signed_in
+      end
+    end
+  end
   end
 end
