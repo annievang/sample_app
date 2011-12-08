@@ -28,9 +28,9 @@ class User < ActiveRecord::Base
                        
 before_save :encrypt_password
 
-def has_password?(submitted_password)
+  def has_password?(submitted_password)
     encrypted_password == encrypt(submitted_password)
-end
+  end
 
   def self.authenticate(email, submitted_password)
     user = find_by_email(email)
@@ -41,6 +41,11 @@ end
   def self.authenticate_with_salt(id, cookie_salt)
     user = find_by_id(id)
     (user && user.salt == cookie_salt) ? user : nil
+  end
+  
+  def feed
+    # This is preliminary. See Chapter 12 for the full implementation.
+    Micropost.where("user_id = ?", id)
   end
   
   private
